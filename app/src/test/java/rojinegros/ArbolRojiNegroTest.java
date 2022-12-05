@@ -1,5 +1,6 @@
 package rojinegros;
 
+import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import rojinegros.data.ArbolRojiNegroGenerador;
@@ -36,7 +37,7 @@ class ArbolRojiNegroTest {
 
     @Test
     void insertarTest() throws Exception {
-        int num[] = {8, 7, 6, 12, 10, 9, 11, 14, 15, 13};
+        int num[] = {8,7,6,12, 10,11, 14, 15};
         ArbolRojinegro instancia = new ArbolRojinegro();
 
         for (int i = 0; i < num.length; i++) {
@@ -71,6 +72,7 @@ class ArbolRojiNegroTest {
         assertEquals(arb2.minimo(), 1);
         assertEquals(arb3.minimo(), 1);
         assertEquals(arb4.minimo(), 1);
+
     }
 
     @Test
@@ -89,15 +91,14 @@ class ArbolRojiNegroTest {
 
     @Test
     void rotacionIzquierdaTest() throws Exception {
-
         //Execute
-        arb1.rotacionIzquierda(4);
+        arb1.rotacionIzquierda(2);
 
         //Assert
         assertEquals(arb1.bfs(), "4 2 5 1 3");
 
         //Execute
-        arb2.rotacionIzquierda(8);
+        arb2.rotacionIzquierda(5);
 
         //Assert
         assertEquals(arb2.bfs(), "8 5 9 1 6");
@@ -110,11 +111,13 @@ class ArbolRojiNegroTest {
         //Execute
         arb3.rotacionDerecha(4);
 
+
         //Assert
         assertEquals(arb3.bfs(), "2 1 4 3 5");
 
         //Execute
-        arb4.rotacionIzquierda(8);
+
+        arb4.rotacionDerecha(8);
 
         //Assert
         assertEquals(arb4.bfs(), "5 1 8 6 9");
