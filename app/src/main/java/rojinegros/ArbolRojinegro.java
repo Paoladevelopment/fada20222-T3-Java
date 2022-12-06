@@ -130,23 +130,26 @@ public class ArbolRojinegro {
             arbARotar.setFather(nuevaRaiz);
             nuevaRaiz.setIzq(arbARotar);
             if(nuevaRaiz.getValor() < padre.getValor()){
-                this.search(padre.getValor()).setIzq(nuevaRaiz);
+                padre.setIzq(nuevaRaiz);
             }else {
-                this.search(padre.getValor()).setDer(nuevaRaiz);
+                padre.setDer(nuevaRaiz);
             }
         }else{
 
             ArbolRojinegro nodoIzquierdo= new ArbolRojinegro(arbARotar.getIzq(), arbARotar.getDer(), arbARotar.getValor(), false);
             nodoIzquierdo.setDer(nuevaRaiz.getIzq());
-            if (nuevaRaiz.getIzq() !=null){
-                nuevaRaiz.getIzq().setFather(nodoIzquierdo);
-            }
             nuevaRaiz.setIzq(nodoIzquierdo);
             nodoIzquierdo.setFather(nuevaRaiz);
+            if (nuevaRaiz.getIzq().getDer() !=null){
+                nuevaRaiz.getIzq().getDer().setFather(nodoIzquierdo);
+            }
+            if(nuevaRaiz.getIzq().getIzq() !=null){
+                nuevaRaiz.getIzq().getIzq().setFather(nodoIzquierdo);
+            }
             arbARotar.setValor(nuevaRaiz.getValor());
             arbARotar.setBlack(nuevaRaiz.isBlack());
             arbARotar.setDer(nuevaRaiz.getDer());
-            arbARotar.setIzq(nodoIzquierdo);
+            arbARotar.setIzq(nuevaRaiz.getIzq());
 
         }
 
@@ -163,19 +166,22 @@ public class ArbolRojinegro {
             arbARotar.setFather(nuevaRaiz);
             nuevaRaiz.setDer(arbARotar);
             if(nuevaRaiz.getValor() < padre.getValor()){
-                this.search(padre.getValor()).setIzq(nuevaRaiz);
+                padre.setIzq(nuevaRaiz);
             }else {
-                this.search(padre.getValor()).setDer(nuevaRaiz);
+                padre.setDer(nuevaRaiz);
             }
 
         }else{
             ArbolRojinegro nodoDerecho= new ArbolRojinegro(arbARotar.getIzq(), arbARotar.getDer(), arbARotar.getValor(), arbARotar.isBlack());
             nodoDerecho.setIzq(nuevaRaiz.getDer());
-            if (nuevaRaiz.getDer() !=null){
-                nuevaRaiz.getDer().setFather(nodoDerecho);
-            }
             nuevaRaiz.setDer(nodoDerecho);
             nodoDerecho.setFather(nuevaRaiz);
+            if (nuevaRaiz.getDer().getIzq() !=null){
+                nuevaRaiz.getDer().getIzq().setFather(nodoDerecho);
+            }
+            if(nuevaRaiz.getDer().getDer() !=null){
+                nuevaRaiz.getDer().getDer().setFather(nodoDerecho);
+            }
             arbARotar.setValor(nuevaRaiz.getValor());
             arbARotar.setBlack(nuevaRaiz.isBlack());
             arbARotar.setIzq(nuevaRaiz.getIzq());
@@ -213,63 +219,21 @@ public class ArbolRojinegro {
         if (padre.isBlack()) {
             return;
         }
-        ArbolRojinegro tio= nodoAgregado.getTio();
-        ArbolRojinegro abuelo= nodoAgregado.getAbuelo();
+
         while (!nodoAgregado.getFather().isBlack()){
-            if (!nodoAgregado.isBlack() && !nodoAgregado.getFather().isBlack() && tio ==null){
-                if (nodoAgregado== nodoAgregado.getFather().getIzq() && nodoAgregado.getFather()== nodoAgregado.getAbuelo().getIzq()){
-                    nodoAgregado.getAbuelo().setBlack(false);
-                    nodoAgregado.getFather().setBlack(true);
-                    this.rotacionDerecha(abuelo.getValor());
-
-
-                } else if (nodoAgregado== nodoAgregado.getFather().getDer() && nodoAgregado.getFather()==nodoAgregado.getAbuelo().getDer()){
-                    nodoAgregado.getAbuelo().setBlack(false);
-                    nodoAgregado.getFather().setBlack(true);
-                    this.rotacionIzquierda(abuelo.getValor());
-
-                } else if (nodoAgregado== nodoAgregado.getFather().getIzq() && nodoAgregado.getFather() == nodoAgregado.getAbuelo().getDer()) {
-                    nodoAgregado= nodoAgregado.getFather();
-                    this.rotacionDerecha(padre.getValor());
-
-
-                } else if (nodoAgregado== nodoAgregado.getFather().getDer() && nodoAgregado.getFather() == nodoAgregado.getAbuelo().getIzq()) {
-                    nodoAgregado= nodoAgregado.getFather();
-                    this.rotacionIzquierda(padre.getValor());
-                }
-
+            if (!nodoAgregado.isBlack() && !nodoAgregado.getFather().isBlack() && nodoAgregado.getTio() ==null){
+                nodoAgregado= casosInsercion(nodoAgregado);
             } else {
-                if (!padre.isBlack() && !tio.isBlack()) {
-                    padre.setBlack(true);
-                    tio.setBlack(true);
-                    abuelo.setBlack(false);
+                if (!nodoAgregado.getFather().isBlack() && !nodoAgregado.getTio().isBlack()) {
+                    nodoAgregado.getFather().setBlack(true);
+                    nodoAgregado.getTio().setBlack(true);
+                    nodoAgregado.getAbuelo().setBlack(false);
                     nodoAgregado = nodoAgregado.getAbuelo();
                     if (nodoAgregado.getFather() == null){
                         break;
                     }
-                }else {
-                    nodoAgregado= this.search(nodoAgregado.getValor());
-                    if (nodoAgregado== nodoAgregado.getFather().getIzq() && nodoAgregado.getFather()== nodoAgregado.getAbuelo().getIzq()){
-                        nodoAgregado.getAbuelo().setBlack(false);
-                        nodoAgregado.getFather().setBlack(true);
-                        this.rotacionDerecha(abuelo.getValor());
-
-
-                    } else if (nodoAgregado== nodoAgregado.getFather().getDer() && nodoAgregado.getFather()==nodoAgregado.getAbuelo().getDer()){
-                        nodoAgregado.getAbuelo().setBlack(false);
-                        nodoAgregado.getFather().setBlack(true);
-                        this.rotacionIzquierda(abuelo.getValor());
-                    } else if (nodoAgregado== nodoAgregado.getFather().getIzq() && nodoAgregado.getFather() == nodoAgregado.getAbuelo().getDer()) {
-                        nodoAgregado= nodoAgregado.getFather();
-                        this.rotacionDerecha(padre.getValor());
-
-
-                    } else if (nodoAgregado== nodoAgregado.getFather().getDer() && nodoAgregado.getFather() == nodoAgregado.getAbuelo().getIzq()) {
-                        nodoAgregado= nodoAgregado.getFather();
-                        this.rotacionIzquierda(padre.getValor());
-                    }else{
-                        break;
-                    }
+                }else{
+                    nodoAgregado= casosInsercion(nodoAgregado);
                 }
             }
         }
@@ -278,10 +242,37 @@ public class ArbolRojinegro {
             while (nodoAgregado.getFather() !=null){
                 nodoAgregado=nodoAgregado.getFather();
             }
-            ArbolRojinegro raiz= nodoAgregado;
-            raiz.setBlack(true);
+            ArbolRojinegro nodo= nodoAgregado;
+            nodo.setBlack(true);
         }
+        this.setIzq(nodoAgregado.getIzq());
+        this.setDer(nodoAgregado.getDer());
+        this.setValor(nodoAgregado.getValor());
+        this.setBlack(nodoAgregado.isBlack());
 
+    }
+
+    private ArbolRojinegro casosInsercion(ArbolRojinegro nodoAgregado) throws Exception{
+        if (nodoAgregado == nodoAgregado.getFather().getIzq() && nodoAgregado.getFather() == nodoAgregado.getAbuelo().getIzq()) {
+            nodoAgregado.getAbuelo().setBlack(false);
+            nodoAgregado.getFather().setBlack(true);
+            nodoAgregado.getAbuelo().rotacionDerecha(nodoAgregado.getAbuelo().getValor());
+
+
+        } else if (nodoAgregado == nodoAgregado.getFather().getDer() && nodoAgregado.getFather() == nodoAgregado.getAbuelo().getDer()) {
+            nodoAgregado.getAbuelo().setBlack(false);
+            nodoAgregado.getFather().setBlack(true);
+            nodoAgregado.getAbuelo().rotacionIzquierda(nodoAgregado.getAbuelo().getValor());
+        } else if (nodoAgregado == nodoAgregado.getFather().getIzq() && nodoAgregado.getFather() == nodoAgregado.getAbuelo().getDer()) {
+            nodoAgregado = nodoAgregado.getFather();
+            nodoAgregado.rotacionDerecha(nodoAgregado.getValor());
+
+
+        } else if (nodoAgregado == nodoAgregado.getFather().getDer() && nodoAgregado.getFather() == nodoAgregado.getAbuelo().getIzq()) {
+            nodoAgregado = nodoAgregado.getFather();
+            nodoAgregado.rotacionIzquierda(nodoAgregado.getValor());
+        }
+        return nodoAgregado;
     }
 
 
