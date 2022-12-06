@@ -2,8 +2,6 @@ package rojinegros;
 
 import lombok.Getter;
 import lombok.Setter;
-
-import javax.naming.OperationNotSupportedException;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -49,11 +47,11 @@ public class ArbolRojinegro {
      */
 
     public void insertar(int x) throws Exception {
-        if (this.getFather() == null && this.getValor() == 0){
+        if (this.getFather() == null && this.getValor() == 0) {
             this.setValor(x);
             this.setBlack(false);
             arreglarInsercion(this);
-        }else{
+        } else {
             ArbolRojinegro nodo = this;
             ArbolRojinegro padre = null;
 
@@ -83,36 +81,36 @@ public class ArbolRojinegro {
     }
 
     public int maximo() throws Exception {
-        ArbolRojinegro arbActual= this;
-        while (arbActual.getDer() != null){
-            arbActual= arbActual.getDer();
+        ArbolRojinegro arbActual = this;
+        while (arbActual.getDer() != null) {
+            arbActual = arbActual.getDer();
         }
         return arbActual.getValor();
     }
 
     public int minimo() throws Exception {
-        ArbolRojinegro arbActual= this;
-        while (arbActual.getIzq() != null){
-            arbActual= arbActual.getIzq();
+        ArbolRojinegro arbActual = this;
+        while (arbActual.getIzq() != null) {
+            arbActual = arbActual.getIzq();
         }
         return arbActual.getValor();
     }
 
     public ArbolRojinegro search(int x) throws Exception {
-        if(this.getValor()== x){
+        if (this.getValor() == x) {
             return this;
-        }else{
-            if(this.getValor() < x){
-                if(this.getDer() !=null){
+        } else {
+            if (this.getValor() < x) {
+                if (this.getDer() != null) {
                     return this.getDer().search(x);
-                }else {
+                } else {
                     return null;
                 }
 
-            }else{
-                if (this.getIzq() !=null){
+            } else {
+                if (this.getIzq() != null) {
                     return this.getIzq().search(x);
-                }else {
+                } else {
                     return null;
                 }
 
@@ -121,29 +119,29 @@ public class ArbolRojinegro {
     }
 
     public void rotacionIzquierda(int x) throws Exception {
-        ArbolRojinegro arbARotar= this.search(x);
-        ArbolRojinegro padre= arbARotar.getFather();
-        ArbolRojinegro nuevaRaiz= arbARotar.getDer();
+        ArbolRojinegro arbARotar = this.search(x);
+        ArbolRojinegro padre = arbARotar.getFather();
+        ArbolRojinegro nuevaRaiz = arbARotar.getDer();
         nuevaRaiz.setFather(padre);
-        if (padre !=null){
+        if (padre != null) {
             arbARotar.setDer(nuevaRaiz.getIzq());
             arbARotar.setFather(nuevaRaiz);
             nuevaRaiz.setIzq(arbARotar);
-            if(nuevaRaiz.getValor() < padre.getValor()){
+            if (nuevaRaiz.getValor() < padre.getValor()) {
                 padre.setIzq(nuevaRaiz);
-            }else {
+            } else {
                 padre.setDer(nuevaRaiz);
             }
-        }else{
+        } else {
 
-            ArbolRojinegro nodoIzquierdo= new ArbolRojinegro(arbARotar.getIzq(), arbARotar.getDer(), arbARotar.getValor(), false);
+            ArbolRojinegro nodoIzquierdo = new ArbolRojinegro(arbARotar.getIzq(), arbARotar.getDer(), arbARotar.getValor(), false);
             nodoIzquierdo.setDer(nuevaRaiz.getIzq());
             nuevaRaiz.setIzq(nodoIzquierdo);
             nodoIzquierdo.setFather(nuevaRaiz);
-            if (nuevaRaiz.getIzq().getDer() !=null){
+            if (nuevaRaiz.getIzq().getDer() != null) {
                 nuevaRaiz.getIzq().getDer().setFather(nodoIzquierdo);
             }
-            if(nuevaRaiz.getIzq().getIzq() !=null){
+            if (nuevaRaiz.getIzq().getIzq() != null) {
                 nuevaRaiz.getIzq().getIzq().setFather(nodoIzquierdo);
             }
             arbARotar.setValor(nuevaRaiz.getValor());
@@ -157,29 +155,29 @@ public class ArbolRojinegro {
     }
 
     public void rotacionDerecha(int x) throws  Exception {
-        ArbolRojinegro arbARotar= search(x);
-        ArbolRojinegro padre= arbARotar.getFather();
-        ArbolRojinegro nuevaRaiz= arbARotar.getIzq();
+        ArbolRojinegro arbARotar = search(x);
+        ArbolRojinegro padre = arbARotar.getFather();
+        ArbolRojinegro nuevaRaiz = arbARotar.getIzq();
         nuevaRaiz.setFather(padre);
-        if (padre !=null){
+        if (padre != null) {
             arbARotar.setIzq(nuevaRaiz.getDer());
             arbARotar.setFather(nuevaRaiz);
             nuevaRaiz.setDer(arbARotar);
-            if(nuevaRaiz.getValor() < padre.getValor()){
+            if (nuevaRaiz.getValor() < padre.getValor()) {
                 padre.setIzq(nuevaRaiz);
-            }else {
+            } else {
                 padre.setDer(nuevaRaiz);
             }
 
-        }else{
-            ArbolRojinegro nodoDerecho= new ArbolRojinegro(arbARotar.getIzq(), arbARotar.getDer(), arbARotar.getValor(), arbARotar.isBlack());
+        } else {
+            ArbolRojinegro nodoDerecho = new ArbolRojinegro(arbARotar.getIzq(), arbARotar.getDer(), arbARotar.getValor(), arbARotar.isBlack());
             nodoDerecho.setIzq(nuevaRaiz.getDer());
             nuevaRaiz.setDer(nodoDerecho);
             nodoDerecho.setFather(nuevaRaiz);
-            if (nuevaRaiz.getDer().getIzq() !=null){
+            if (nuevaRaiz.getDer().getIzq() != null) {
                 nuevaRaiz.getDer().getIzq().setFather(nodoDerecho);
             }
-            if(nuevaRaiz.getDer().getDer() !=null){
+            if (nuevaRaiz.getDer().getDer() != null) {
                 nuevaRaiz.getDer().getDer().setFather(nodoDerecho);
             }
             arbARotar.setValor(nuevaRaiz.getValor());
@@ -191,25 +189,25 @@ public class ArbolRojinegro {
     }
 
     //Area de métodos útiles
-    public ArbolRojinegro getTio(){
-        ArbolRojinegro abuelo= this.getFather().getFather();
-        if (abuelo !=null){
-            if (this.getFather().getValor() < abuelo.getValor()){
+    public ArbolRojinegro getTio() {
+        ArbolRojinegro abuelo = this.getFather().getFather();
+        if (abuelo != null) {
+            if (this.getFather().getValor() < abuelo.getValor()) {
                 return abuelo.getDer();
-            }else {
+            } else {
                 return abuelo.getIzq();
             }
-        }else{
+        } else {
             return null;
         }
     }
 
-    public ArbolRojinegro getAbuelo(){
+    public ArbolRojinegro getAbuelo() {
         return this.getFather().getFather();
     }
 
-    public void arreglarInsercion(ArbolRojinegro nodoAgregado) throws Exception{
-        ArbolRojinegro padre= nodoAgregado.getFather();
+    public void arreglarInsercion(ArbolRojinegro nodoAgregado) throws Exception {
+        ArbolRojinegro padre = nodoAgregado.getFather();
         if (padre == null) {
             // Regla 2: La raiz siempre debe ser negra
             nodoAgregado.black = true;
@@ -220,29 +218,29 @@ public class ArbolRojinegro {
             return;
         }
 
-        while (!nodoAgregado.getFather().isBlack()){
-            if (!nodoAgregado.isBlack() && !nodoAgregado.getFather().isBlack() && nodoAgregado.getTio() ==null){
-                nodoAgregado= casosInsercion(nodoAgregado);
+        while (!nodoAgregado.getFather().isBlack()) {
+            if (!nodoAgregado.isBlack() && !nodoAgregado.getFather().isBlack() && nodoAgregado.getTio() == null) {
+                nodoAgregado = casosInsercion(nodoAgregado);
             } else {
                 if (!nodoAgregado.getFather().isBlack() && !nodoAgregado.getTio().isBlack()) {
                     nodoAgregado.getFather().setBlack(true);
                     nodoAgregado.getTio().setBlack(true);
                     nodoAgregado.getAbuelo().setBlack(false);
                     nodoAgregado = nodoAgregado.getAbuelo();
-                    if (nodoAgregado.getFather() == null){
+                    if (nodoAgregado.getFather() == null) {
                         break;
                     }
-                }else{
-                    nodoAgregado= casosInsercion(nodoAgregado);
+                } else {
+                    nodoAgregado = casosInsercion(nodoAgregado);
                 }
             }
         }
 
-        if (nodoAgregado != null){
-            while (nodoAgregado.getFather() !=null){
-                nodoAgregado=nodoAgregado.getFather();
+        if (nodoAgregado != null) {
+            while (nodoAgregado.getFather() != null) {
+                nodoAgregado = nodoAgregado.getFather();
             }
-            ArbolRojinegro nodo= nodoAgregado;
+            ArbolRojinegro nodo = nodoAgregado;
             nodo.setBlack(true);
         }
         this.setIzq(nodoAgregado.getIzq());
@@ -252,7 +250,7 @@ public class ArbolRojinegro {
 
     }
 
-    private ArbolRojinegro casosInsercion(ArbolRojinegro nodoAgregado) throws Exception{
+    private ArbolRojinegro casosInsercion(ArbolRojinegro nodoAgregado) throws Exception {
         if (nodoAgregado == nodoAgregado.getFather().getIzq() && nodoAgregado.getFather() == nodoAgregado.getAbuelo().getIzq()) {
             nodoAgregado.getAbuelo().setBlack(false);
             nodoAgregado.getFather().setBlack(true);
