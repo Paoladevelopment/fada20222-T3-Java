@@ -74,6 +74,7 @@ class ArbolRojiNegroTest {
         assertEquals(instanciaB.inorden(), "-32 -22 -14 -9 -7 -1 0 1 2 3 7 9 13 14 17 19 20 22 33 50 66");
         assertTrue(altura(instancia) <= 2 * Math.log(20) / Math.log(2) + 1);
 
+
     }
 
     @Test

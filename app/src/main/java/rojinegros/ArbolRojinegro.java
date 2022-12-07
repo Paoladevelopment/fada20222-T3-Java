@@ -125,6 +125,9 @@ public class ArbolRojinegro {
         nuevaRaiz.setFather(padre);
         if (padre != null) {
             arbARotar.setDer(nuevaRaiz.getIzq());
+            if (arbARotar.getDer() != null) {
+                arbARotar.getDer().setFather(arbARotar);
+            }
             arbARotar.setFather(nuevaRaiz);
             nuevaRaiz.setIzq(arbARotar);
             if (nuevaRaiz.getValor() < padre.getValor()) {
@@ -162,6 +165,9 @@ public class ArbolRojinegro {
         if (padre != null) {
             arbARotar.setIzq(nuevaRaiz.getDer());
             arbARotar.setFather(nuevaRaiz);
+            if (arbARotar.getIzq() != null) {
+                arbARotar.getIzq().setFather(arbARotar);
+            }
             nuevaRaiz.setDer(arbARotar);
             if (nuevaRaiz.getValor() < padre.getValor()) {
                 padre.setIzq(nuevaRaiz);
@@ -240,8 +246,7 @@ public class ArbolRojinegro {
             while (nodoAgregado.getFather() != null) {
                 nodoAgregado = nodoAgregado.getFather();
             }
-            ArbolRojinegro nodo = nodoAgregado;
-            nodo.setBlack(true);
+            nodoAgregado.setBlack(true);
         }
         this.setIzq(nodoAgregado.getIzq());
         this.setDer(nodoAgregado.getDer());
